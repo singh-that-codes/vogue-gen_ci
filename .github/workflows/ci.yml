@@ -1,77 +1,49 @@
-name: Voguegen Web Deployment
+name: Deploy Flutter Web App to AWS
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Clone repository
+        uses: actions/checkout@v4
 
-      - name: Clone Flutter repository at specified version
-        run: git clone https://github.com/flutter/flutter.git -b 3.5.0-11.0.pre --depth 1 ${{ github.workspace }}/flutter
-
-      - name: Activate Flutter SDK
-        run: ${{ github.workspace }}/flutter/bin/flutter --version
-
-      - name: Add Flutter to PATH
-        run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
-
-      - name: Install app dependencies
-        run: |
-          cd ${{ github.workspace }}/your_project_directory
-          flutter pub get --verbose
-
-      - name: Upgrade dependencies
-        run: flutter pub upgrade --verbose
-
-      - name: Run tests
-        run: flutter test
-
-      - name: Build web app
-        run: flutter build web --verbose
-
-      - name: Archive web app
-        uses: actions/upload-artifact@v2
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
         with:
-          name: web-app
-          path: build/web/
+          channel: stable
+          flutter-version: 3.5.0
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v3
+      - name: Check Flutter version
+        run: flutter --version
 
-      - name: Download built web app artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: web-app
-          path: build/web
+      - name: Install dependencies
+        run: flutter pub get
 
-      - name: Deploy to S3
-        uses: jakejarvis/s3-sync-action@v0.5.1
+      - name: Build Flutter web app
+        run: flutter build web
+
+      - name: Deploy to AWS S3
+        uses: jakejarvis/s3-sync-action@master
         with:
           args: --acl public-read --follow-symlinks --delete
         env:
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: "ap-south-1"
+          AWS_REGION: "us-east-1" # Specify your AWS region
           SOURCE_DIR: "build/web"
 
-      - name: Invalidate CloudFront Distribution
-        uses: chetan/invalidate-cloudfront-action@v2
+      - name: Invalidate CloudFront cache
+        uses: chetan/invalidate-cloudfront-action@v1
+        with:
+          distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+          paths: "/*"
         env:
-          DISTRIBUTION: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
-          PATHS: "/*"
-          AWS_REGION: "ap-south-1"
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
