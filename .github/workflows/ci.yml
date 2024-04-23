@@ -18,6 +18,9 @@ jobs:
       - name: Clone Flutter repository at specified version
         run: git clone https://github.com/flutter/flutter.git -b 3.5.0-11.0.pre --depth 1 ${{ github.workspace }}/flutter
 
+      - name: Activate Flutter SDK
+        run: ${{ github.workspace }}/flutter/bin/flutter --version
+
       - name: Add Flutter to PATH
         run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
 
