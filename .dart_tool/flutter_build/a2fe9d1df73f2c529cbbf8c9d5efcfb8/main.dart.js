@@ -78842,7 +78842,7 @@ A.Pj.prototype={
 aD(){this.b_()
 A.bF(A.cs(0,0,3),new A.acC(this))},
 T(a){var s=null,r=A.b([$.afV(),$.hP()],t.t_)
-return A.amM(s,A.iX(s,A.ke(A.Sj(A.b([A.anw("VogueGen.ai",B.a7,A.ow().$3$color$fontSize$fontWeight($.hP(),65,B.bZ))],t.u6),!1),s,s),B.E,s,new A.d_(s,s,s,s,s,new A.mS(B.cd,B.kN,B.cH,r,s,s),B.ap),1/0,s,s,1/0))}}
+return A.amM(s,A.iX(s,A.ke(A.Sj(A.b([A.anw("Vogue----Gen.ai",B.a7,A.ow().$3$color$fontSize$fontWeight($.hP(),65,B.bZ))],t.u6),!1),s,s),B.E,s,new A.d_(s,s,s,s,s,new A.mS(B.cd,B.kN,B.cH,r,s,s),B.ap),1/0,s,s,1/0))}}
 A.acC.prototype={
 $0(){var s,r,q,p=this.a.c
 p.toString
