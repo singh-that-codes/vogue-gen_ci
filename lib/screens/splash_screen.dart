@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
           child: AnimatedTextKit(
             animatedTexts: [
               TyperAnimatedText(
-                "VogueGen.ai",
+                "Vogue----Gen.ai",
                 textStyle: GoogleFonts.poppins(
                   color: AppColors.lightPurple,
                   fontSize: 65.0,
