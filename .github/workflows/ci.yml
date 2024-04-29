@@ -13,9 +13,6 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v4
 
-      # Assuming the Flutter web app is already built and stored in 'build/web' directory
-      # Make sure to build it manually before pushing to the repository
-
       - name: Deploy to AWS S3
         uses: jakejarvis/s3-sync-action@master
         with:
@@ -24,7 +21,7 @@ jobs:
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: "ap-south-1" # Specify your AWS region
+          AWS_REGION: "us-east-1" # Specify your AWS region
           SOURCE_DIR: "build/web"
 
       - name: Invalidate CloudFront cache
